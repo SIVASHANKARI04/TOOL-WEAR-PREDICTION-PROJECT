@@ -1,4 +1,8 @@
 import streamlit as st
+
+# Set page configuration at the very beginning
+st.set_page_config(page_title="Tool Wear Prediction", page_icon="🔧", layout="wide")
+
 import numpy as np
 import pickle
 import base64
@@ -15,10 +19,8 @@ with open(SCALER_PATH, "rb") as f:
     scaler = pickle.load(f)
 
 selected_columns = [
-    "Z1_ActualPosition", "Z1_CommandPosition", "M1_sequence_number", "X1_OutputCurrent",
-    "S1_ActualPosition", "S1_CommandPosition", "Y1_OutputCurrent", "S1_OutputCurrent",
-    "clamp_pressure", "feedrate", "M1_CURRENT_FEEDRATE", "S1_CurrentFeedback",
-    "X1_DCBusVoltage", "X1_OutputVoltage", "Y1_DCBusVoltage"
+    "material","feedrate","clamp_pressure", "X1_ActualPosition", "Y1_ActualPosition", "Z1_ActualPosition", "X1_CurrentFeedback", "Y1_CurrentFeedback",
+    "M1_CURRENT_FEEDRATE", "X1_DCBusVoltage", "X1_OutputPower", "Y1_OutputPower", "S1_OutputPower"
 ]
 
 sequence_length = 10
@@ -42,9 +44,9 @@ set_bg_image("360_F_896565357_fmPjmJPX8vKdZ7FGodwE3F8pxkFEfuCX.jpg")
 
 # Custom CSS for Sidebar Styling with White, Black, and Blue
 sidebar_style = """
-    <style>
+     <style>
     [data-testid="stSidebar"] {
-        background: linear-gradient(to bottom, #ffffff, #4f83cc, #000000); /* Gradient from White to Blue to Black */
+        background: linear-gradient(to bottom, #0a0f3c, #1e3a8a, #00bfff); /* Dark Blue to Neon Blue */
         color: white;
     }
     [data-testid="stSidebar"] h1, [data-testid="stSidebar"] label {
@@ -57,8 +59,6 @@ sidebar_style = """
     </style>
 """
 st.markdown(sidebar_style, unsafe_allow_html=True)
-
-st.set_page_config(page_title="Tool Wear Prediction", page_icon="🔧", layout="wide")
 
 menu = ["Home", "Prediction"]
 choice = st.sidebar.selectbox("Navigation", menu)
@@ -112,3 +112,4 @@ elif choice == "Prediction":
         st.write(f"**🔄 Machining Finalized:** {machining_finalized_status}")
         st.write(f"**👀 Passed Visual Inspection:** {visual_inspection_status}")
         st.success("✅ Prediction Completed!")
+
