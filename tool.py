@@ -1,9 +1,9 @@
 import streamlit as st
 import numpy as np
 import pickle
+import base64
 from tensorflow.keras.models import load_model
 import pandas as pd
-from fpdf import FPDF
 
 # Load trained LSTM model and scaler
 MODEL_PATH = "Final_model.h5"
@@ -23,7 +23,41 @@ selected_columns = [
 
 sequence_length = 10
 
-# Streamlit Page Navigation
+# Set up background image
+def set_bg_image(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode()
+    page_bg_img = f"""
+    <style>
+    .stApp {{
+        background-image: url(data:image/png;base64,{encoded_string});
+        background-size: cover;
+        background-repeat: no-repeat;
+    }}
+    </style>
+    """
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+set_bg_image("pexels-mikebirdy-120049.jpg")
+
+# Custom CSS for Sidebar Styling with White, Black, and Blue
+sidebar_style = """
+    <style>
+    [data-testid="stSidebar"] {
+        background: linear-gradient(to bottom, #ffffff, #4f83cc, #000000); /* Gradient from White to Blue to Black */
+        color: white;
+    }
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] label {
+        color: white;
+        font-weight: bold;
+    }
+    [data-testid="stSidebar"] .css-1e4r1h6 {
+        background-color: transparent;
+    }
+    </style>
+"""
+st.markdown(sidebar_style, unsafe_allow_html=True)
+
 st.set_page_config(page_title="Tool Wear Prediction", page_icon="🔧", layout="wide")
 
 menu = ["Home", "Prediction"]
@@ -42,7 +76,14 @@ if choice == "Home":
         ## 🛠 How Prediction Works?
         - Enter real-time machining parameters.
         - Model predicts **Tool Condition, Machining Finalization, and Visual Inspection**.
-        - Download results as a **PDF**.
+        
+        ## 🌍 How is this Useful?
+        - **Reduces Downtime:** Predicting tool wear in advance helps prevent unexpected failures.
+        - **Cost Savings:** Avoids unnecessary tool replacements and optimizes machining efficiency.
+        - **Improved Quality:** Ensures better machining results by maintaining tool health.
+        - **Automation & Efficiency:** Enhances manufacturing processes with AI-driven insights.
+        
+        This tool empowers industries by providing real-time insights into tool wear, ultimately improving productivity and reducing maintenance costs.
         """
     )
 
@@ -71,21 +112,3 @@ elif choice == "Prediction":
         st.write(f"**🔄 Machining Finalized:** {machining_finalized_status}")
         st.write(f"**👀 Passed Visual Inspection:** {visual_inspection_status}")
         st.success("✅ Prediction Completed!")
-
-        def create_pdf():
-            pdf = FPDF()
-            pdf.add_page()
-            pdf.set_font("Arial", size=12)
-            pdf.cell(200, 10, txt="Tool Wear Prediction Report", ln=True, align='C')
-            pdf.ln(10)
-            pdf.cell(200, 10, txt=f"Tool Condition: {pred_tool_condition_label}", ln=True)
-            pdf.cell(200, 10, txt=f"Machining Finalized: {machining_finalized_status}", ln=True)
-            pdf.cell(200, 10, txt=f"Visual Inspection: {visual_inspection_status}", ln=True)
-            pdf.output("Tool_Wear_Report.pdf")
-            return "Tool_Wear_Report.pdf"
-
-        if st.button("📄 Download PDF Report"):
-            pdf_file = create_pdf()
-            with open(pdf_file, "rb") as f:
-                st.download_button(label="Download Report", data=f, file_name="Tool_Wear_Report.pdf", mime="application/pdf")
-
