@@ -38,7 +38,7 @@ def set_bg_image(image_path):
     """
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-set_bg_image("pexels-mikebirdy-120049.jpg")
+set_bg_image("360_F_896565357_fmPjmJPX8vKdZ7FGodwE3F8pxkFEfuCX.jpg")
 
 # Custom CSS for Sidebar Styling with White, Black, and Blue
 sidebar_style = """
