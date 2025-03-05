@@ -40,4 +40,8 @@ The project includes a Streamlit-based interactive web app with:
 ✅ Modern UI with a sky blue & black theme
 ✅ Deployment on AWS EC2
 
-🚀 Installation & Usa
+**📌 Project Links**
+
+🔗 Live App: http://3.111.34.131:8501/
+
+🔗 Dataset Source: https://www.kaggle.com/code/anantayatimtong/tool-wear-prediction/input?select=train.csv/github
